@@ -1,14 +1,10 @@
 import pygame
 from pygame import mixer
 import os
-
-# Задаємо кольори
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-NEON = (244, 20, 170)
+WIDTH = 1200
+HEIGHT = 800
+FPS = 60
+SPEED = 15
 
 # Налаштування папки ассетів
 game_folder = os.path.dirname(__file__)
@@ -28,14 +24,14 @@ class Platform(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = platform_img
         self.rect = self.image.get_rect()
-        self.rect.center = (1200 / 2, 800 - 40)    
+        self.rect.center = (WIDTH / 2, HEIGHT - 40)    
     
     def update(self):  
         keys = pygame.key.get_pressed()        
-        if keys[pygame.K_RIGHT] and self.rect.x < 1200-138:            
-            self.rect.x += 15        
+        if keys[pygame.K_RIGHT] and self.rect.x < WIDTH-138:            
+            self.rect.x += SPEED        
         if keys[pygame.K_LEFT] and self.rect.x > 5:            
-            self.rect.x -= 15
+            self.rect.x -= SPEED
 
 #Класс шарика
 class Ball(pygame.sprite.Sprite):    
@@ -43,7 +39,7 @@ class Ball(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)        
         self.image = ball_img        
         self.rect = self.image.get_rect()        
-        self.rect.center = (1200 / 2, 800 - 80)        
+        self.rect.center = (WIDTH / 2, HEIGHT - 80)        
         self.dx = 1        
         self.dy = -1    
     
@@ -67,11 +63,11 @@ class Ball(pygame.sprite.Sprite):
     
     def update(self):    
         #Направление движения        
-        self.rect.x += (15/2) * self.dx        
-        self.rect.y += (15/2) * self.dy    
+        self.rect.x += (SPEED/2) * self.dx        
+        self.rect.y += (SPEED/2) * self.dy    
         
         #Столкновение с боками игрового поля        
-        if self.rect.centerx < 20 or self.rect.centerx > 1200 - 20:            
+        if self.rect.centerx < 20 or self.rect.centerx > WIDTH - 20:            
             self.dx = -self.dx    
         #Столкновение с верхом игрового поля        
         if self.rect.centery < 20:            
@@ -87,7 +83,7 @@ class Ball(pygame.sprite.Sprite):
             self.dx, self.dy = self.detect_collision(self.dx, self.dy, blocks[hit_index])            
             blocks.pop(hit_index)    
         #Победа/Поражение        
-        if self.rect.bottom > 800 + 40:            
+        if self.rect.bottom > HEIGHT + 40:            
             mixer.music.stop()            
             global running            
             running = False        
@@ -105,7 +101,7 @@ class Block(pygame.sprite.Sprite):
 
 # Створюємо гру та вікно
 pygame.init()
-screen = pygame.display.set_mode((1200, 800))
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("My Game")
 clock = pygame.time.Clock()
 all_sprites = pygame.sprite.Group()
@@ -123,7 +119,7 @@ all_sprites.add(blocks)
 running = True
 while running:    
     # Тримаємо цикл на правильній швидкості    
-    clock.tick(60)   
+    clock.tick(FPS)   
     # Введення процесу (події)    
     for event in pygame.event.get():        
         # Проверка на закрытие окна        
