@@ -15,7 +15,7 @@ block_img = pygame.image.load(os.path.join(img_folder, 'block.png'))
 ball_img = pygame.image.load(os.path.join(img_folder, 'ball.png'))
 
 mixer.init()
-mixer.music.load("sounds/soundtrack.mp3")
+mixer.music.load("Game/sounds/soundtrack.mp3")
 mixer.music.play(-1)
 
 #Класс платформы
